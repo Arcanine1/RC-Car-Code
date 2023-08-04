@@ -16,34 +16,55 @@ void setup() {
 }
 
 void loop() {
-  
+  test();
+}
+
+
+void forward(){
+  digitalWrite(leftOne,HIGH);
+  digitalWrite(leftTwo,LOW);
+  digitalWrite(rightOne,HIGH);
+  digitalWrite(rightTwo,LOW);
+
+}
+
+void backward(){
+  digitalWrite(leftOne,LOW);
+  digitalWrite(leftTwo,HIGH);
+  digitalWrite(rightOne,LOW);
+  digitalWrite(rightTwo,HIGH);
+
+}
+
+void turnLeft(){
+  digitalWrite(leftOne,LOW);
+  digitalWrite(leftTwo,LOW);
+  digitalWrite(rightOne,LOW);
+  digitalWrite(rightTwo,HIGH);
+}
+
+
+void turnRight(){
   digitalWrite(leftOne,HIGH);
   digitalWrite(leftTwo,LOW);
   digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,LOW);
+}
+
+void test(){
+
+  forward();
   delay(2000);
 
-  digitalWrite(leftOne,LOW);
-  digitalWrite(leftTwo,HIGH);
-  digitalWrite(rightOne,LOW);
-  digitalWrite(rightTwo,LOW);
+  backward();
   delay(2000);
 
-  digitalWrite(leftOne,LOW);
-  digitalWrite(leftTwo,LOW);
-  digitalWrite(rightOne,HIGH);
-  digitalWrite(rightTwo,LOW);
+  turnLeft();
   delay(2000);
 
-    digitalWrite(leftOne,LOW);
-  digitalWrite(leftTwo,LOW);
-  digitalWrite(rightOne,LOW);
-  digitalWrite(rightTwo,HIGH);
-  delay(2000);
-
-      digitalWrite(leftOne,HIGH);
-  digitalWrite(leftTwo,LOW);
-  digitalWrite(rightOne,LOW);
-  digitalWrite(rightTwo,HIGH);
+  turnRight();
   delay(2000);
 }
+
+
+
