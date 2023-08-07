@@ -1,10 +1,13 @@
 #include <SoftwareSerial.h>;
-SoftwareSerial BT(3, 4); 
+SoftwareSerial BT(2, 3); 
 
 # define leftOne 5
 # define leftTwo 6
 # define rightOne 7
 # define rightTwo 8
+
+#define leftSpeed A5
+#define rightSpeed A6
 
 
 void setup() {
@@ -29,71 +32,87 @@ void loop() {
     if (BT.available())
   // if text arrived in from BT serial...
   {
+
     a=(BT.read());
-    if (a=='1')
-    {
-      BT.println("LED on");
+    if(a=='T'){
+      test();
     }
-    if (a=='2')
-    {
-      BT.println("LED off");
+    else{
+      forward(10*int(a));
     }
-    if (a=='?')
-    {
-      BT.println("Send '1' to turn LED on");
-      BT.println("Send '2' to turn LED on");
-    }   
-    // you can add more "if" statements with other characters to add more commands
+   
   }
 
 }
 
 
 
-void forward(){
+void forward(double speed){
   digitalWrite(leftOne,HIGH);
   digitalWrite(leftTwo,LOW);
   digitalWrite(rightOne,HIGH);
   digitalWrite(rightTwo,LOW);
 
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+  analogWrite(rightSpeed,normalizedSpeed);
 }
 
-void backward(){
+
+void backward(double speed){
   digitalWrite(leftOne,LOW);
   digitalWrite(leftTwo,HIGH);
   digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,HIGH);
 
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+  analogWrite(rightSpeed,normalizedSpeed);
+
 }
 
-void turnLeft(){
+void turnLeft(double speed){
   digitalWrite(leftOne,LOW);
-  digitalWrite(leftTwo,LOW);
-  digitalWrite(rightOne,LOW);
-  digitalWrite(rightTwo,HIGH);
+  digitalWrite(leftTwo,HIGH);
+  digitalWrite(rightOne,HIGH);
+  digitalWrite(rightTwo,LOW);
+
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+  analogWrite(rightSpeed,normalizedSpeed);
 }
 
 
-void turnRight(){
+void turnRight(double speed){
   digitalWrite(leftOne,HIGH);
   digitalWrite(leftTwo,LOW);
   digitalWrite(rightOne,LOW);
+  digitalWrite(rightTwo,HIGH);
+
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+  analogWrite(rightSpeed,normalizedSpeed);
+}
+
+void stop(){
+  digitalWrite(leftOne,LOW);
+  digitalWrite(leftTwo,LOW);
+  digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,LOW);
+
+  analogWrite(leftSpeed,0);
+  analogWrite(rightSpeed,0);
 }
 
 void test(){
 
-  forward();
-  delay(2000);
+  for (int i=0; i<100; i++){
+  forward(i);
+  delay(100);
+}
 
-  backward();
-  delay(2000);
 
-  turnLeft();
-  delay(2000);
-
-  turnRight();
-  delay(2000);
+  stop();
 }
 
 
