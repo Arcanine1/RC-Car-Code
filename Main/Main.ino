@@ -1,13 +1,13 @@
 #include <SoftwareSerial.h>;
 SoftwareSerial BT(2, 3); 
 
-# define leftOne 5
-# define leftTwo 6
-# define rightOne 7
-# define rightTwo 8
+# define leftOne 7
+# define leftTwo 8
+# define rightOne 9
+# define rightTwo 10
 
-#define leftSpeed A5
-#define rightSpeed A6
+#define leftSpeed 5
+#define rightSpeed 6
 
 
 void setup() {
@@ -17,6 +17,8 @@ void setup() {
   pinMode(leftTwo, OUTPUT);
   pinMode(rightOne, OUTPUT);
   pinMode(rightTwo, OUTPUT);
+  pinMode(leftSpeed, OUTPUT);
+  pinMode(rightSpeed, OUTPUT);
 
   // set the data rate for the SoftwareSerial port
   BT.begin(9600);
@@ -46,6 +48,11 @@ void loop() {
 }
 
 
+void setSpeed(double speed){
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+  analogWrite(rightSpeed,normalizedSpeed);
+}
 
 void forward(double speed){
   digitalWrite(leftOne,HIGH);
@@ -53,9 +60,8 @@ void forward(double speed){
   digitalWrite(rightOne,HIGH);
   digitalWrite(rightTwo,LOW);
 
-  int normalizedSpeed = (speed/100)*255;
-  analogWrite(leftSpeed,normalizedSpeed);
-  analogWrite(rightSpeed,normalizedSpeed);
+  setSpeed(speed);
+
 }
 
 
@@ -65,10 +71,7 @@ void backward(double speed){
   digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,HIGH);
 
-  int normalizedSpeed = (speed/100)*255;
-  analogWrite(leftSpeed,normalizedSpeed);
-  analogWrite(rightSpeed,normalizedSpeed);
-
+  setSpeed(speed);
 }
 
 void turnLeft(double speed){
@@ -77,9 +80,7 @@ void turnLeft(double speed){
   digitalWrite(rightOne,HIGH);
   digitalWrite(rightTwo,LOW);
 
-  int normalizedSpeed = (speed/100)*255;
-  analogWrite(leftSpeed,normalizedSpeed);
-  analogWrite(rightSpeed,normalizedSpeed);
+  setSpeed(speed);
 }
 
 
@@ -89,9 +90,7 @@ void turnRight(double speed){
   digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,HIGH);
 
-  int normalizedSpeed = (speed/100)*255;
-  analogWrite(leftSpeed,normalizedSpeed);
-  analogWrite(rightSpeed,normalizedSpeed);
+  setSpeed(speed);
 }
 
 void stop(){
@@ -100,19 +99,31 @@ void stop(){
   digitalWrite(rightOne,LOW);
   digitalWrite(rightTwo,LOW);
 
-  analogWrite(leftSpeed,0);
-  analogWrite(rightSpeed,0);
+  setSpeed(0);
+
 }
 
 void test(){
+  forward(0);
+  goThroughSpeeds();
 
-  for (int i=0; i<100; i++){
-  forward(i);
-  delay(100);
-}
+  backward(0);
+  goThroughSpeeds();
 
+  turnLeft(0);
+  goThroughSpeeds();
+
+  turnRight(0);
+  goThroughSpeeds();
 
   stop();
+}
+
+void goThroughSpeeds(){
+  for (int i=0; i<100; i++){
+    setSpeed(i);
+    delay(100);
+  }
 }
 
 
