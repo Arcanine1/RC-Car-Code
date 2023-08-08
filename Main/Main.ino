@@ -39,8 +39,25 @@ void loop() {
     if(a=='T'){
       test();
     }
-    else{
-      forward(10*int(a));
+
+    else if(a=='S'){
+      stop();
+    }
+
+    else if(a=='F'){
+      forward(getSpeed());
+    }
+
+    else if(a=='B'){
+      backward(getSpeed());
+    }
+
+    else if(a=='L'){
+      turnLeft(getSpeed());
+    }
+
+    else if(a=='R'){
+      turnRight(getSpeed());
     }
    
   }
@@ -103,6 +120,7 @@ void stop(){
 
 }
 
+//PWM of every motor
 void test(){
   forward(0);
   goThroughSpeeds();
@@ -119,12 +137,55 @@ void test(){
   stop();
 }
 
+//mainly for test methods
 void goThroughSpeeds(){
   for (int i=0; i<100; i++){
     setSpeed(i);
-    delay(100);
+    delay(50);
   }
 }
 
+//gets speed from next 2 charcter inputs
+double getSpeed(){
+  BT.println("enter speed");
+  int digitOne =0;
+  int digitTwo =0;
+  int digit =1;
+
+  while(true){
+    if(BT.available()){
+      if(digit==1){
+        char CdigitOne = BT.read();
+        if(isDigit(CdigitOne)){
+          digitOne = int(CdigitOne)-48;
+        }
+        else{
+          return 0;
+        } 
+        BT.println(digitOne);
+      }
+
+      if(digit==2){
+        char CdigitTwo = BT.read();
+        if(isDigit(CdigitTwo)){
+          digitTwo = int(CdigitTwo)-48;
+        }
+        else{
+          return 0;
+        } 
+        BT.println(digitTwo);
+
+      }
+
+      digit++;
+      if(digit>2){
+        break;
+      }
+      
+    }
+  }
+  BT.println(digitOne*10 +digitTwo);
+  return (digitOne*10 +digitTwo);
+}
 
 
