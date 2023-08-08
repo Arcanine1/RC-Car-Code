@@ -22,21 +22,22 @@ void setup() {
 
   // set the data rate for the SoftwareSerial port
   BT.begin(9600);
+  Serial.begin(9600);
   // Send test message to other device
   BT.println("Hello from Arduino");
 
 }
 
-char a; // stores incoming character from other device
-
 void loop() {
+
 
     if (BT.available())
   // if text arrived in from BT serial...
   {
 
-    a=(BT.read());
-    if(a=='T'){
+    String a = readString();
+
+    if(a=="test"){
       test();
     }
 
@@ -63,6 +64,31 @@ void loop() {
   }
 
 }
+
+String readString(){
+
+    String a = ""; // stores incoming character from other device
+    char newChar;
+      //reads text
+    a = "";
+
+    //looks for escape character
+    while (true) {
+      newChar = BT.read();
+
+      if(int(newChar) == -1){
+        break;
+      }
+      a = a+newChar;  // Append each character to the string
+    }
+    
+    Serial.print("Received: ");
+    Serial.println(a);
+
+    return a;
+}
+
+
 
 
 void setSpeed(double speed){
@@ -181,11 +207,10 @@ double getSpeed(){
       if(digit>2){
         break;
       }
-      
+
     }
   }
   BT.println(digitOne*10 +digitTwo);
   return (digitOne*10 +digitTwo);
 }
-
 
