@@ -35,32 +35,41 @@ void loop() {
   // if text arrived in from BT serial...
   {
 
-    String a = readString();
+    String input = readString();
+    char first = input.charAt(0);
 
-    if(a=="test"){
+    if(input=="test"){
       test();
     }
 
-    else if(a=='S'){
+    else if(input== "stop"){
       stop();
     }
-
-    else if(a=='F'){
-      forward(getSpeed());
+    // for directions uses a 3 char string to show direction and speed
+    else if(first=='F'){
+      forward(getSpeed(input));
     }
 
-    else if(a=='B'){
-      backward(getSpeed());
+    else if(first=='B'){
+      backward(getSpeed(input));
     }
 
-    else if(a=='L'){
-      turnLeft(getSpeed());
+    else if(first=='A'){
+      turnLeft(getSpeed(input));
     }
 
-    else if(a=='R'){
-      turnRight(getSpeed());
+    else if(first=='D'){
+      turnRight(getSpeed(input));
     }
-   
+
+    // for left and right motor gets a 4 char string with a F or R on the last defining direction
+    else if(first=='L'){
+      leftMotor(getSpeed(input),input);
+    }
+
+    else if(first=='R'){
+      rightMotor(getSpeed(input),input);
+    }
   }
 
 }
@@ -88,8 +97,13 @@ String readString(){
     return a;
 }
 
+double getSpeed(String input){
 
+  double char1 = int(input.charAt(1))- int('0');
+  double char2 = int(input.charAt(2))- int('0');
 
+  return (char1*10 + char2);
+}
 
 void setSpeed(double speed){
   int normalizedSpeed = (speed/100)*255;
@@ -136,6 +150,38 @@ void turnRight(double speed){
   setSpeed(speed);
 }
 
+void leftMotor(double speed, String input){
+
+  if(input.charAt(3) == 'F'){
+      digitalWrite(leftOne,HIGH);
+      digitalWrite(leftTwo,LOW);
+  }
+
+  else{
+      digitalWrite(leftOne,LOW);
+      digitalWrite(leftTwo,HIGH);
+  }
+
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(leftSpeed,normalizedSpeed);
+}
+
+void rightMotor(double speed, String input){
+
+    if(input.charAt(3) == 'F'){
+      digitalWrite(rightOne,HIGH);
+      digitalWrite(rightTwo,LOW);
+  }
+
+  else{
+      digitalWrite(rightOne,LOW);
+      digitalWrite(rightTwo,HIGH);
+  }
+
+  int normalizedSpeed = (speed/100)*255;
+  analogWrite(rightSpeed,normalizedSpeed);
+}
+
 void stop(){
   digitalWrite(leftOne,LOW);
   digitalWrite(leftTwo,LOW);
@@ -171,46 +217,4 @@ void goThroughSpeeds(){
   }
 }
 
-//gets speed from next 2 charcter inputs
-double getSpeed(){
-  BT.println("enter speed");
-  int digitOne =0;
-  int digitTwo =0;
-  int digit =1;
-
-  while(true){
-    if(BT.available()){
-      if(digit==1){
-        char CdigitOne = BT.read();
-        if(isDigit(CdigitOne)){
-          digitOne = int(CdigitOne)-48;
-        }
-        else{
-          return 0;
-        } 
-        BT.println(digitOne);
-      }
-
-      if(digit==2){
-        char CdigitTwo = BT.read();
-        if(isDigit(CdigitTwo)){
-          digitTwo = int(CdigitTwo)-48;
-        }
-        else{
-          return 0;
-        } 
-        BT.println(digitTwo);
-
-      }
-
-      digit++;
-      if(digit>2){
-        break;
-      }
-
-    }
-  }
-  BT.println(digitOne*10 +digitTwo);
-  return (digitOne*10 +digitTwo);
-}
 
