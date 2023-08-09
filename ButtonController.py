@@ -23,6 +23,7 @@ def stopCar():
 
 
 device =connect()
+stopCar()
 
 #creates base
 root = tk.Tk()
