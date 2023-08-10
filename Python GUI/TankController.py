@@ -35,19 +35,17 @@ def stopCar():
     leftSpeed.set(0)
     rightSpeed.set(0)
 
-#connects to device and turns off all motors
+#intialize methods
 device =connect()
-stopCar()
-
-#creates base
 root = tk.Tk()
-root.title("Bluetooth Terminal")
+leftSpeed = tk.IntVar()
+rightSpeed = tk.IntVar()
+stopCar()
 
 
 #creates radio buttons and speed
+root.title("Bluetooth Terminal")
 custom_font = font.Font(size=100)
-leftSpeed = tk.IntVar()
-rightSpeed = tk.IntVar()
 left = tk.Scale(root, orient='vertical', length=200, variable= leftSpeed, from_=99, to=-99, font=custom_font, command= updateLeftSpeed)
 right = tk.Scale(root, orient='vertical', length=200,variable= rightSpeed, from_=99, to=-99, font=custom_font, command= updateRightSpeed)
 stop = tk.Button(root, text = "STOP", font= custom_font, command=stopCar, bg= "red")

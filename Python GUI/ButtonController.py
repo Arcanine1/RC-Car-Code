@@ -22,19 +22,17 @@ def stopCar():
     speedValue.set(0)
 
 
+#intialize methods
 device =connect()
-stopCar()
-
-#creates base
 root = tk.Tk()
-root.title("Bluetooth Terminal")
+direction = tk.StringVar()
+speedValue = tk.IntVar()
+stopCar()
 
 
 #creates radio buttons and speed
+root.title("Bluetooth Terminal")
 custom_font = font.Font(size=100)
-direction = tk.StringVar()
-speedValue = tk.IntVar()
-speedValue.set(0)
 forward = tk.Radiobutton(root, text='Forward', variable=direction, value='F', font= custom_font, command= update)
 backward = tk.Radiobutton(root, text='Backward', variable=direction, value='B', font= custom_font, command= update)
 left = tk.Radiobutton(root, text='Left', variable=direction, value='A', font= custom_font,command= update)
